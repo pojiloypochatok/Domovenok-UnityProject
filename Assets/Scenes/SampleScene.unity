@@ -272,7 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef5466f885e7e1044a286d9c4d76c5c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wheel_speed: 65
+  wheel_speed: 100
   leftlimit: {x: -129, y: 0, z: 0}
   rightlimit: {x: 129, y: 0, z: 0}
 --- !u!1 &619394800

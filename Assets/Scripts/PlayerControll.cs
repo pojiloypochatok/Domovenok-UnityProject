@@ -6,7 +6,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Spine.Unity;
 using Spine.Unity.Examples;
-using System;
+using System.Security.Cryptography;
+using UnityEditor.Rendering.LookDev;
 
 
 
@@ -34,16 +35,25 @@ public class PlayerController : MonoBehaviour
     void Start()
         {
             rb = GetComponent<Rigidbody2D>();
-            player = GameObject.Find("Domovoy");
             skeletonAnimation = GetComponent<SkeletonAnimation>();
             spineAnimationState = skeletonAnimation.AnimationState;
-            
+
+
         }
 
-    // Update is called once per frame
-    void Update()
+
+// Update is called once per frame
+void Update()
     {
-        Move();
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (Input.GetMouseButtonDown(0))
+        {
+            diference = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+        Invoke("PlayerToCam", 10);
+        Move(diference);
+
+
     }
 
     public void SetAnimation(int scene, string name, bool loop)
@@ -57,14 +67,8 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void Move()
+    public void Move(Vector3 diference)
     {
-        Vector3 targetposition;
-        if (Input.GetMouseButtonDown(0))
-        {
-            diference = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        }
         if (transform.position.x + 1 < diference.x)
         {
             transform.Translate(HorizontalSpeed, 0, 0);
@@ -80,6 +84,23 @@ public class PlayerController : MonoBehaviour
             SetAnimation(0, idle, true);
         }
 
+    }
+
+    public void PlayerToCam()
+    {
+        float screenWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
+        float leftBorder = Camera.main.transform.position.x - Camera.main.orthographicSize * Screen.width / Screen.height;
+        float rightBorder = Camera.main.transform.position.x + Camera.main.orthographicSize * Screen.width / Screen.height;
+        float centerX = Camera.main.transform.position.x;
+        if (transform.position.x < leftBorder)
+        {
+            diference.x = centerX;
+        }
+
+        else if (transform.position.x > rightBorder)
+        {
+            diference.x = centerX;
+        }        
     }
 
 }
