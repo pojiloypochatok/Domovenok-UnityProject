@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Canvas objects
   layers:
   - Default
   - TransparentFX
@@ -44,6 +45,12 @@ TagManager:
   - name: base
     uniqueID: 410520057
     locked: 0
-  - name: next
+  - name: envirtoment
     uniqueID: 2672805101
+    locked: 0
+  - name: objects
+    uniqueID: 1432926385
+    locked: 0
+  - name: player
+    uniqueID: 1844163507
     locked: 0

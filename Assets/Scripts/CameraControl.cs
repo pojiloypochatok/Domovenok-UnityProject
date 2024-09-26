@@ -25,11 +25,11 @@ public class CameraControl : MonoBehaviour
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0 && transform.position.x < rightlimit.x) // Движение камеры вправо
+        if (scroll > 0 && transform.position.x < rightlimit.x + - 1) // Движение камеры вправо
         {
             transform.position = Vector3.Lerp(transform.position, transform.position + transform.right * scroll * (wheel_speed * 100), Time.deltaTime);
         }
-        else if (scroll < 0 && transform.position.x > leftlimit.x) // Движение камеры влево
+        else if (scroll < 0 && transform.position.x > leftlimit.x + 1) // Движение камеры влево
         {
             transform.position = Vector3.Lerp(transform.position, transform.position + transform.right * scroll * (wheel_speed * 100), Time.deltaTime);
         }
