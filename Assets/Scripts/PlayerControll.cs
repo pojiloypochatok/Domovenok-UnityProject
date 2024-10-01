@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     public SkeletonAnimation skeletonAnimation;
     public Spine.AnimationState spineAnimationState;
     string currentname;
+    public LayerMask layerMask;
 
 
     // Start is called before the first frame update
@@ -37,8 +38,6 @@ public class PlayerController : MonoBehaviour
             rb = GetComponent<Rigidbody2D>();
             skeletonAnimation = GetComponent<SkeletonAnimation>();
             spineAnimationState = skeletonAnimation.AnimationState;
-
-
         }
 
 
@@ -49,11 +48,21 @@ void Update()
         if (Input.GetMouseButtonDown(0))
         {
             diference = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (CheckForCollision(diference))
+            {
+                if (diference.x < 0)
+                {
+                    diference.x += 25;
+                }
+                else
+                {
+                    diference.x -= 25;
+                }
+                Debug.Log("Colider");
+            }
         }
-        Invoke("PlayerToCam", 10);
+        Invoke("PlayerToCam", 10f);
         Move(diference);
-
-
     }
 
     public void SetAnimation(int scene, string name, bool loop)
@@ -64,7 +73,6 @@ void Update()
         }
         spineAnimationState.SetAnimation(scene, name, loop);
         currentname = name;
-
     }
 
     public void Move(Vector3 diference)
@@ -101,6 +109,17 @@ void Update()
         {
             diference.x = centerX;
         }        
+    }
+
+    bool CheckForCollision(Vector3 spawnlocation)
+    {
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(spawnlocation, new Vector2(15, 15), 0f, layerMask);
+        if (colliders.Length > 0)
+        {
+            return true;
+        }
+        // ≈сли коллизи€ не обнаружена, возвращаем false
+        return false;
     }
 
 }
