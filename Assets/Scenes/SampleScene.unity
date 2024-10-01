@@ -122,7 +122,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+<<<<<<< HEAD
 --- !u!1 &4213587
+=======
+--- !u!1 &363580753
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,21 +134,109 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 4213588}
   - component: {fileID: 4213589}
   m_Layer: 0
   m_Name: gold
   m_TagString: Untagged
+=======
+  - component: {fileID: 363580756}
+  - component: {fileID: 363580755}
+  - component: {fileID: 363580757}
+  - component: {fileID: 363580754}
+  m_Layer: 0
+  m_Name: Molot_left
+  m_TagString: Molot
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!4 &4213588
+=======
+--- !u!95 &363580754
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363580753}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 62bd94449a0f4a748906a401fc4036eb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &363580755
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363580753}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 1432926385
+  m_SortingLayer: 3
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -357278130, guid: 8d8ff296686784242b5fab358cb1c12b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 1
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.3, y: 0.3}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &363580756
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   m_GameObject: {fileID: 4213587}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
@@ -888,10 +980,24 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &310818811
 GameObject:
+=======
+  m_GameObject: {fileID: 363580753}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0.7071068, z: 0, w: 0}
+  m_LocalPosition: {x: 343.4, y: 53.1, z: 0}
+  m_LocalScale: {x: 77.53367, y: 77.53367, z: 77.53367}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 90}
+--- !u!111 &363580757
+Animation:
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   serializedVersion: 6
   m_Component:
   - component: {fileID: 310818813}
@@ -1176,6 +1282,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+=======
+  m_GameObject: {fileID: 363580753}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: a3c015e76312f58419f1d7972de9f1db, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: a3c015e76312f58419f1d7972de9f1db, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
 --- !u!1 &479556171
 GameObject:
   m_ObjectHideFlags: 0
@@ -1208,7 +1326,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InvPos: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
+=======
+  molot_right: {fileID: 2030940108}
+  molot_left: {fileID: 363580753}
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
   movespeed: 10
+  player: {fileID: 2108077332}
 --- !u!60 &479556173
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1730,7 +1854,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InvPos: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
+=======
+  molot_right: {fileID: 2030940108}
+  molot_left: {fileID: 363580753}
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
   movespeed: 10
+  player: {fileID: 2108077332}
 --- !u!60 &537287471
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2256,9 +2386,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InvPos: {x: -40, y: -20, z: 0}
+<<<<<<< HEAD
   movespeed: 10
 --- !u!1 &710927116
 GameObject:
+=======
+  molot_right: {fileID: 2030940108}
+  molot_left: {fileID: 363580753}
+  movespeed: 10
+  player: {fileID: 2108077332}
+--- !u!60 &708375007
+PolygonCollider2D:
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2746,7 +2885,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InvPos: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
+=======
+  molot_right: {fileID: 2030940108}
+  molot_left: {fileID: 363580753}
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
   movespeed: 10
+  player: {fileID: 2108077332}
 --- !u!60 &1277610612
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3490,8 +3635,13 @@ GameObject:
   - component: {fileID: 2030940110}
   - component: {fileID: 2030940109}
   m_Layer: 0
+<<<<<<< HEAD
   m_Name: fantasy_weapons_pack1_noglow_22
   m_TagString: Untagged
+=======
+  m_Name: Molot_right
+  m_TagString: Molot
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3571,6 +3721,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2030940108}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0, y: -0, z: 0.7132615, w: 0.7008981}
   m_LocalPosition: {x: 58.148193, y: 40.960648, z: -1672.8909}
   m_LocalScale: {x: 77.53368, y: 77.53368, z: 77.53367}
@@ -3580,6 +3731,17 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 91.002}
 --- !u!1 &2067127628
 GameObject:
+=======
+  m_LocalRotation: {x: -0, y: -0, z: 0.7055805, w: 0.70862985}
+  m_LocalPosition: {x: 397.1, y: 51.6, z: 0}
+  m_LocalScale: {x: 77.53367, y: 77.53367, z: 77.53367}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 89.753}
+--- !u!111 &2030940112
+Animation:
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3618,6 +3780,7 @@ SpriteRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2067127628}
   m_Enabled: 1
+<<<<<<< HEAD
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -3662,6 +3825,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+=======
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 33f634fe08eb1ac46a4a3ec4d516084a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
 --- !u!1 &2108077332
 GameObject:
   m_ObjectHideFlags: 0
@@ -3802,6 +3979,7 @@ MonoBehaviour:
   run_right: run_right
   run_left: run_left
   skeletonAnimation: {fileID: 0}
+<<<<<<< HEAD
 --- !u!1 &2116554763
 GameObject:
   m_ObjectHideFlags: 0
@@ -3840,6 +4018,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+=======
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -3850,4 +4033,13 @@ SceneRoots:
   - {fileID: 1633595166}
   - {fileID: 2108077336}
   - {fileID: 1851890376}
+<<<<<<< HEAD
   - {fileID: 289623443}
+=======
+  - {fileID: 708375005}
+  - {fileID: 537287473}
+  - {fileID: 479556175}
+  - {fileID: 1277610614}
+  - {fileID: 2030940111}
+  - {fileID: 363580756}
+>>>>>>> 365a608 (Work of playercontroll and itemtoinv)
