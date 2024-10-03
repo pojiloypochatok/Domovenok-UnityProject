@@ -59,6 +59,9 @@ public class ObjectToInv : MonoBehaviour
     [SerializeField]
     public GameObject inv;
 
+    [SerializeField]
+    private TextMeshProUGUI energyCounter;
+
     public GameObject buttonLamp;
     public GameObject buttonPicture;
     public GameObject buttonPot;
@@ -74,38 +77,53 @@ public class ObjectToInv : MonoBehaviour
 
     void Update()
     {
-        if (Mathf.Abs(transform.position.x - player.transform.position.x) <= 46 & isdestory & isclickon)
-        {
-            if (transform.position.x > player.transform.position.x)
+
+        string[] parts = energyCounter.text.Split('/');
+        int currentEnergyCounter = int.Parse(parts[0]);
+
+        if (currentEnergyCounter > 0){
+        
+            if (Mathf.Abs(transform.position.x - player.transform.position.x) <= 46 & isdestory & isclickon)
             {
-                SpawnMolotRight();
-                Invoke("PlayAnim", 0.3f);
-                isdestory = false;
-                Invoke("MoveToInv", 0.5f);
+                if (transform.position.x > player.transform.position.x)
+                {
+                    SpawnMolotRight();
+                    Invoke("PlayAnim", 0.3f);
+                    isdestory = false;
+                    Invoke("MoveToInv", 0.5f);
+                }
+                else
+                {
+                    SpawnMolotLeft();
+                    Invoke("PlayAnim", 0.3f);
+                    isdestory = false;
+                    Invoke("MoveToInv", 0.5f);
+                }
             }
-            else
-            {
-                SpawnMolotLeft();
-                Invoke("PlayAnim", 0.3f);
-                isdestory = false;
-                Invoke("MoveToInv", 0.5f);
-            }
-        }
         UpdateButtonVisibility();
+        }
     }
 
     public void MoveToInv()
     {
-        Destroy(GameObject.Find("Molot_right(Clone)"));
-        Destroy(GameObject.Find("Molot_left(Clone)"));
-        Destroy(this.gameObject);
-        inv.GetComponent<Animation>().Play("inv");
 
-        UpdateCounterAndButton(
-            inventoryContainer.transform.Find(gameObject.tag).Find("Counter" + gameObject.tag).gameObject,
-            inventoryContainer.transform.Find(gameObject.tag).Find("Button" + gameObject.tag).gameObject,
-            true
-        );
+        string[] parts = energyCounter.text.Split('/');
+        int currentEnergyCounter = int.Parse(parts[0]);
+
+        if (currentEnergyCounter > 0){
+            Destroy(GameObject.Find("Molot_right(Clone)"));
+            Destroy(GameObject.Find("Molot_left(Clone)"));
+            Destroy(this.gameObject);
+            inv.GetComponent<Animation>().Play("inv");
+
+            UpdateCounterAndButton(
+                inventoryContainer.transform.Find(gameObject.tag).Find("Counter" + gameObject.tag).gameObject,
+                inventoryContainer.transform.Find(gameObject.tag).Find("Button" + gameObject.tag).gameObject,
+                true
+            );
+            currentEnergyCounter -= 1;
+            energyCounter.text = currentEnergyCounter + "/" + 10;
+        }
     }
 
     private void PlayAnim()

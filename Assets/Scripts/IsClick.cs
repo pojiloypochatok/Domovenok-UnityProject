@@ -18,6 +18,6 @@ public class IsClick : MonoBehaviour
 
     void TaskOnClick()
     {
-        Debug.Log("Вы нажали кнопку!");
+        Debug.Log("!");
     }
 }
