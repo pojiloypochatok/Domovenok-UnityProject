@@ -56,35 +56,39 @@ public class ObjectToInv : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI silverCounter;
 
+    [SerializeField]
+    public GameObject inv;
+
     public GameObject buttonLamp;
     public GameObject buttonPicture;
     public GameObject buttonPot;
     public GameObject buttonChocolate;
+    private Animation anim;
+    public AnimationClip objanim;
 
     void Start()
     {
         UpdateButtonVisibility();
+        anim = GetComponent<Animation>();
     }
 
     void Update()
     {
-        if (Mathf.Abs(transform.position.x - player.transform.position.x) <= 40 & isdestory & isclickon)
+        if (Mathf.Abs(transform.position.x - player.transform.position.x) <= 46 & isdestory & isclickon)
         {
             if (transform.position.x > player.transform.position.x)
             {
-                Instantiate(molot_right, new Vector3(transform.position.x - 10, transform.position.y + 10, transform.position.z), Quaternion.identity);
-                Animator anim = molot_right.GetComponent<Animator>();
-                anim.Play("GarbageBroke");
-                Invoke("MoveToInv", 0.4f);
+                SpawnMolotRight();
+                Invoke("PlayAnim", 0.3f);
                 isdestory = false;
+                Invoke("MoveToInv", 0.5f);
             }
             else
             {
-                Instantiate(molot_left, new Vector3(transform.position.x + 10, transform.position.y + 10, transform.position.z), Quaternion.identity);
-                Animator anim = molot_left.GetComponent<Animator>();
-                anim.Play("GarbageBroke_left");
-                Invoke("MoveToInv", 0.4f);
+                SpawnMolotLeft();
+                Invoke("PlayAnim", 0.3f);
                 isdestory = false;
+                Invoke("MoveToInv", 0.5f);
             }
         }
         UpdateButtonVisibility();
@@ -94,13 +98,31 @@ public class ObjectToInv : MonoBehaviour
     {
         Destroy(GameObject.Find("Molot_right(Clone)"));
         Destroy(GameObject.Find("Molot_left(Clone)"));
-        transform.position = InvPos;
+        Destroy(this.gameObject);
+        inv.GetComponent<Animation>().Play("inv");
 
         UpdateCounterAndButton(
             inventoryContainer.transform.Find(gameObject.tag).Find("Counter" + gameObject.tag).gameObject,
             inventoryContainer.transform.Find(gameObject.tag).Find("Button" + gameObject.tag).gameObject,
             true
         );
+    }
+
+    private void PlayAnim()
+    {
+        anim.Play(objanim.name);
+    }
+
+    private void SpawnMolotLeft()
+    {
+        Instantiate(molot_left, new Vector3(transform.position.x + 10, transform.position.y + 10, transform.position.z), 
+            Quaternion.identity);
+    }
+
+    private void SpawnMolotRight()
+    {
+        Instantiate(molot_right, new Vector3(transform.position.x - 10, transform.position.y + 10, transform.position.z), 
+            Quaternion.identity);
     }
 
     private void UpdateButtonVisibility()

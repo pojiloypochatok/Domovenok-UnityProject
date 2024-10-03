@@ -22,7 +22,7 @@ public class GarbageSpawn : MonoBehaviour
     void Start()
     {
 
-        spawnCount = 20;//Random.Range(minSpawnCount, maxSpawnCount);
+        spawnCount = Random.Range(minSpawnCount, maxSpawnCount);
         SpawnGarbage(spawnCount);
     }
 

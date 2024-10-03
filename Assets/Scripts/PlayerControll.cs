@@ -52,16 +52,16 @@ void Update()
             {
                 if (diference.x < 0)
                 {
-                    diference.x += 25;
+                    diference.x += 40;
                 }
                 else
                 {
-                    diference.x -= 25;
+                    diference.x -= 40;
                 }
                 Debug.Log("Colider");
             }
         }
-        Invoke("PlayerToCam", 10f);
+        Invoke("PlayerToCam", 5f);
         Move(diference);
     }
 
