@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 void Update()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) & Camera.main.ScreenToWorldPoint(Input.mousePosition).y > -9.3)
         {
             diference = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (CheckForCollision(diference))

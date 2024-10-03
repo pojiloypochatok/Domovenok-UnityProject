@@ -62,6 +62,7 @@ public class ObjectToInv : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI energyCounter;
 
+
     public GameObject buttonLamp;
     public GameObject buttonPicture;
     public GameObject buttonPot;
@@ -106,7 +107,7 @@ public class ObjectToInv : MonoBehaviour
 
     public void MoveToInv()
     {
-
+        GarbageSpawn.totalobj -= 1;
         string[] parts = energyCounter.text.Split('/');
         int currentEnergyCounter = int.Parse(parts[0]);
 
