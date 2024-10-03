@@ -19,7 +19,6 @@ public class GarbageSpawn : MonoBehaviour
     private Vector3 spawnlocation;
     public LayerMask layerMask;
     private List<GameObject> spawnedObjects = new List<GameObject>();
-    // Start is called before the first frame update
     void Start()
     {
 
@@ -27,7 +26,6 @@ public class GarbageSpawn : MonoBehaviour
         SpawnGarbage(spawnCount);
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -56,7 +54,6 @@ public class GarbageSpawn : MonoBehaviour
         {
             return true;
         }
-        // Åñëè êîëëèçèÿ íå îáíàðóæåíà, âîçâðàùàåì false
         return false;
     }
 
