@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Canvas objects
+  - Molot
+  - Garbage
+  - BrokenLamp
+  - BrokenPicture
+  - BrokenPot
+  - Chocolate
   layers:
   - Default
   - TransparentFX

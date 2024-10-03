@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
             spineAnimationState = skeletonAnimation.AnimationState;
         }
 
+
 // Update is called once per frame
 void Update()
     {
@@ -117,7 +118,7 @@ void Update()
         {
             return true;
         }
-        // Если коллизия не обнаружена, возвращаем false
+        // Г…Г±Г«ГЁ ГЄГ®Г«Г«ГЁГ§ГЁГї Г­ГҐ Г®ГЎГ­Г Г°ГіГ¦ГҐГ­Г , ГўГ®Г§ГўГ°Г Г№Г ГҐГ¬ false
         return false;
     }
 
