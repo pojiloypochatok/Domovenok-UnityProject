@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using SQLite;
 
 
 public class InventoryCounter : MonoBehaviour
@@ -62,6 +63,16 @@ public class ObjectToInv : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI energyCounter;
 
+    [SerializeField]
+    private TextMeshProUGUI treeCounter;
+    [SerializeField]
+    private TextMeshProUGUI pazzleCounter;
+    [SerializeField]
+    private TextMeshProUGUI shirtCounter;
+    [SerializeField]
+    private TextMeshProUGUI leaveCounter;
+    public string[] randomAwardCounters = new string[] { "tree", "pazzle", "shirt", "leave", "coin" };
+
     public GameObject buttonLamp;
     public GameObject buttonPicture;
     public GameObject buttonPot;
@@ -69,10 +80,65 @@ public class ObjectToInv : MonoBehaviour
     private Animation anim;
     public AnimationClip objanim;
 
-    void Start()
+
+    async void Start()
     {
         UpdateButtonVisibility();
         anim = GetComponent<Animation>();
+        
+        SQLiteConnection db = DatabaseManager.GetConnection();
+        string dbPath = db.DatabasePath;
+        var conn = new SQLiteAsyncConnection(dbPath);
+
+        var existingCoins = await conn.Table<Coins>().FirstOrDefaultAsync(c => c.Id == 1);
+        var existingCollectionsElems = await conn.Table<Collections>().FirstOrDefaultAsync(c => c.Id == 1);
+        var existingInventoryElems = await conn.Table<Inventory>().FirstOrDefaultAsync(c => c.Id == 1);
+
+        int silveraward = existingCoins != null ? existingCoins.Silver : 0;
+        silverCounter.text = silveraward.ToString();
+
+        int goldaward = existingCoins != null ? existingCoins.Gold : 0;
+        goldCounter.text = goldaward.ToString();
+
+        int treCounterBase = existingCollectionsElems != null ? existingCollectionsElems.Tree : 0;
+        int shirtCounterBase = existingCollectionsElems != null ? existingCollectionsElems.Shirt : 0;
+        int pazzleCounterBase = existingCollectionsElems != null ? existingCollectionsElems.Pazzle : 0;
+        int leafCounterBase = existingCollectionsElems != null ? existingCollectionsElems.Leaf : 0;
+
+        treeCounter.text = treCounterBase.ToString();
+        pazzleCounter.text = pazzleCounterBase.ToString();
+        shirtCounter.text = shirtCounterBase.ToString();
+        leaveCounter.text = leafCounterBase.ToString();
+
+        int[] baseCounters = new int[4];
+        if (existingInventoryElems != null)
+        {
+            baseCounters[0] = existingInventoryElems != null ? existingInventoryElems.BrokenLamp : 0;
+            baseCounters[1] = existingInventoryElems != null ? existingInventoryElems.BrokenPicture : 0;
+            baseCounters[2] = existingInventoryElems != null ? existingInventoryElems.BrokenPot : 0;
+            baseCounters[3] = existingInventoryElems != null ? existingInventoryElems.Chocolate : 0;
+        }
+
+        string[] NamesObjects = new string[] { "BrokenLamp", "BrokenPicture", "BrokenPot", "Chocolate" };
+
+        for (int i = 0; i < NamesObjects.Length; i++)
+        {
+            GameObject container = inventoryContainer.transform.Find(NamesObjects[i]).gameObject;
+            GameObject counter = container.transform.Find("Counter" + NamesObjects[i]).gameObject;
+            TextMeshProUGUI textComponent = counter.GetComponent<TextMeshProUGUI>();
+            
+            string text = textComponent.text;
+            string[] parts = text.Split('/');
+            
+            if (parts.Length < 2)
+            {
+                Debug.LogError($"Неверный формат текста '{text}'. Ожидалось 'число/число'.");
+                continue;
+            }
+            
+            int counterBase = baseCounters[i];
+            textComponent.text = counterBase.ToString() + "/" + "5";
+        }
     }
 
     void Update()
@@ -104,8 +170,13 @@ public class ObjectToInv : MonoBehaviour
         }
     }
 
-    public void MoveToInv()
+    public async void MoveToInv()
     {
+        SQLiteConnection db = DatabaseManager.GetConnection();
+        string dbPath = db.DatabasePath;
+        var conn = new SQLiteAsyncConnection(dbPath);
+
+        var existingEnergy = await conn.Table<Energy>().FirstOrDefaultAsync(c => c.Id == 1);
 
         string[] parts = energyCounter.text.Split('/');
         int currentEnergyCounter = int.Parse(parts[0]);
@@ -122,7 +193,10 @@ public class ObjectToInv : MonoBehaviour
                 true
             );
             currentEnergyCounter -= 1;
-            energyCounter.text = currentEnergyCounter + "/" + 10;
+            existingEnergy.Amount = currentEnergyCounter;
+            await conn.UpdateAsync(existingEnergy);
+            energyCounter.text = existingEnergy.Amount + "/" + 10;
+            
         }
     }
 
@@ -143,13 +217,19 @@ public class ObjectToInv : MonoBehaviour
             Quaternion.identity);
     }
 
-    private void UpdateButtonVisibility()
+    async private void UpdateButtonVisibility()
     {
-        GameObject itemContainer = inventoryContainer.transform.Find(gameObject.tag).gameObject;
+        SQLiteConnection db = DatabaseManager.GetConnection();
+        string dbPath = db.DatabasePath;
+        var conn = new SQLiteAsyncConnection(dbPath);
+
+        var existingInventoryElems = await conn.Table<Inventory>().FirstOrDefaultAsync(c => c.Id == 1);
+
+        GameObject itemContainer = inventoryContainer.transform.Find(gameObject.tag)?.gameObject;
         if (itemContainer != null)
         {
-            GameObject counter = itemContainer.transform.Find("Counter" + gameObject.tag).gameObject;
-            GameObject button = itemContainer.transform.Find("Button" + gameObject.tag).gameObject; 
+            GameObject counter = itemContainer.transform.Find("Counter" + gameObject.tag)?.gameObject;
+            GameObject button = itemContainer.transform.Find("Button" + gameObject.tag)?.gameObject; 
 
             if (counter != null && button != null)
             {
@@ -157,27 +237,44 @@ public class ObjectToInv : MonoBehaviour
 
                 if (textComponent != null)
                 {
-                    string[] parts = textComponent.text.Split('/');
-                    if (parts.Length > 0)
-                    {
-                        int currentCount = int.Parse(parts[0]);
+                    int currentCount = 0;
 
-                        if (currentCount >= 5)
-                        {
-                            button.SetActive(true); 
-                        }
-                        else
-                        {
-                            button.SetActive(false); 
-                        }
+                    switch (gameObject.tag)
+                    {
+                        case "BrokenLamp":
+                            currentCount = existingInventoryElems?.BrokenLamp ?? 0;
+                            break;
+                        case "BrokenPicture":
+                            currentCount = existingInventoryElems?.BrokenPicture ?? 0;
+                            break;
+                        case "BrokenPot":
+                            currentCount = existingInventoryElems?.BrokenPot ?? 0;
+                            break;
+                        case "Chocolate":
+                            currentCount = existingInventoryElems?.Chocolate ?? 0;
+                            break;
+                        default:
+                            currentCount = 0;
+                            break;
+                    }
+                    if (currentCount >= 5) {
+                        button.SetActive(true);
+                    }else {
+                        button.SetActive(false);
                     }
                 }
             }
         }
     }
 
-    private void UpdateCounterAndButton(GameObject counter, GameObject button, bool increase)
+    private async void UpdateCounterAndButton(GameObject counter, GameObject button, bool increase)
     {
+        SQLiteConnection db = DatabaseManager.GetConnection();
+        string dbPath = db.DatabasePath;
+        var conn = new SQLiteAsyncConnection(dbPath);
+
+        var existingInventoryElems = await conn.Table<Inventory>().FirstOrDefaultAsync(c => c.Id == 1);
+
         if (counter != null && button != null)
         {
             TextMeshProUGUI textComponent = counter.GetComponent<TextMeshProUGUI>();
@@ -188,37 +285,101 @@ public class ObjectToInv : MonoBehaviour
                 {
                     int currentCount = int.Parse(parts[0]);
 
+                    string counterName = textComponent.name;
+
                     if (increase)
                     {
                         currentCount++;
+                        if (existingInventoryElems == null)
+                        {
+                            existingInventoryElems = new Inventory
+                            {
+                                Id = 1,
+                                BrokenLamp = counterName == "CounterBrokenLamp" ? currentCount : 0,
+                                BrokenPicture = counterName == "CounterBrokenPicture" ? currentCount : 0,
+                                BrokenPot = counterName == "CounterBrokenPot" ? currentCount : 0,
+                                Chocolate = counterName == "CounterChocolate" ? currentCount : 0
+                            };
+                            await conn.InsertAsync(existingInventoryElems);
+                        }
+                        else
+                        {
+                            UpdateInventory(ref existingInventoryElems, counterName, currentCount);
+                            await conn.UpdateAsync(existingInventoryElems);
+                        }
                     }
                     else
                     {
-                        currentCount -= 5;
+                        if (currentCount >= 5){
+                            currentCount -= 5; 
+                        }
+                        if (existingInventoryElems != null)
+                        {
+                            UpdateInventory(ref existingInventoryElems, counterName, currentCount);
+                            await conn.UpdateAsync(existingInventoryElems);
+                        }
                     }
 
-                    textComponent.text = currentCount.ToString() + textComponent.text[1..];
+                    textComponent.text = currentCount.ToString() + "/" + "5";
 
-                    if (currentCount >= 5)
-                    {
+                    if (currentCount >= 5){
                         button.SetActive(true);
-                    }
-                    else
-                    {
+                    }else {
                         button.SetActive(false);
                     }
                 }
             }
         }
     }
-
-    private void UpdateCoinCounter(int silveramount, int goldamount)
+    private void UpdateInventory(ref Inventory inventory, string counterName, int count)
     {
-        if (goldCounter != null && silverCounter != null) {
-            int silveraward = int.Parse(silverCounter.text) + silveramount;
-            silverCounter.text = silveraward.ToString();
-            int goldaward = int.Parse(goldCounter.text) + goldamount;
-            goldCounter.text = goldaward.ToString();
+        switch (counterName)
+        {
+            case "CounterBrokenLamp":
+                inventory.BrokenLamp = count;
+                break;
+            case "CounterBrokenPicture":
+                inventory.BrokenPicture = count;
+                break;
+            case "CounterBrokenPot":
+                inventory.BrokenPot = count;
+                break;
+            case "CounterChocolate":
+                inventory.Chocolate = count;
+                break;
+        }
+    }
+
+    private async void UpdateCoinCounter(int silveramount, int goldamount)
+    {
+        if (goldCounter == null || silverCounter == null)
+        {
+            return;
+        }
+
+        SQLiteConnection db = DatabaseManager.GetConnection();
+        string dbPath = db.DatabasePath;
+        var conn = new SQLiteAsyncConnection(dbPath);
+
+        var existingCoins = await conn.Table<Coins>().FirstOrDefaultAsync(c => c.Id == 1);
+
+        if (existingCoins != null)
+        {
+            existingCoins.Silver += silveramount;
+            existingCoins.Gold += goldamount;
+
+            silverCounter.text = existingCoins.Silver.ToString();
+            goldCounter.text = existingCoins.Gold.ToString();
+
+            await conn.UpdateAsync(existingCoins);
+        }
+        else
+        {
+            existingCoins = new Coins { Id = 1, Silver = silveramount, Gold = goldamount };
+            await conn.InsertAsync(existingCoins);
+
+            silverCounter.text = existingCoins.Silver.ToString();
+            goldCounter.text = existingCoins.Gold.ToString();
         }
     }
 
@@ -227,8 +388,26 @@ public class ObjectToInv : MonoBehaviour
         isclickon = true;
     }
 
-    public void Trade()
+    public async void Trade()
     {
+        SQLiteConnection db = DatabaseManager.GetConnection();
+        string dbPath = db.DatabasePath;
+        var conn = new SQLiteAsyncConnection(dbPath);
+        var existingCollectionsElems = await conn.Table<Collections>().FirstOrDefaultAsync(c => c.Id == 1);
+
+        string[] partsTree = treeCounter.text.Split('/');
+        int currentTreeCount = int.Parse(partsTree[0]);
+        
+        string[] partsPazzle = pazzleCounter.text.Split('/');
+        int currentPazzleCount = int.Parse(partsPazzle[0]);
+        
+        string[] partsShirt = shirtCounter.text.Split('/');
+        int currentShirtCount = int.Parse(partsShirt[0]);
+
+        string[] partsLeaf = leaveCounter.text.Split('/');
+        int currentLeafCount = int.Parse(partsLeaf[0]);
+
+
         GameObject button = inventoryContainer.transform.Find(gameObject.tag).Find("Button" + gameObject.tag).gameObject;
         if (button != null)
         {
@@ -240,6 +419,61 @@ public class ObjectToInv : MonoBehaviour
             }
 
             UpdateCoinCounter(100, 1);
+            
+            int randomNumber = Random.Range(0, 100); 
+
+            if (randomNumber < 33){
+
+                int randomIndex = Random.Range(0, randomAwardCounters.Length);
+                string selectedAward = randomAwardCounters[randomIndex];
+
+                if (selectedAward == "tree"){
+                    currentTreeCount++;
+                    treeCounter.text = currentTreeCount.ToString();
+                }
+                else if (selectedAward == "pazzle"){
+                    currentPazzleCount ++;
+                    pazzleCounter.text = currentPazzleCount.ToString();
+                }
+                else if (selectedAward == "shirt"){
+                    currentShirtCount ++;
+                    shirtCounter.text = currentShirtCount.ToString();
+                }
+                else if (selectedAward == "leave"){
+                    currentLeafCount ++;
+                    leaveCounter.text = currentLeafCount.ToString();
+                }
+                else if (selectedAward == "coin"){
+                    UpdateCoinCounter(100, 1);
+                }
+
+                if (existingCollectionsElems == null){
+                    existingCollectionsElems = new Collections
+                    {
+                        Id = 1,
+                        Tree = selectedAward == "tree" ? currentTreeCount : 0,
+                        Pazzle = selectedAward == "pazzle" ? currentPazzleCount : 0,
+                        Shirt = selectedAward == "shirt" ? currentShirtCount : 0,
+                        Leaf = selectedAward == "leave" ? currentLeafCount : 0
+                    };
+        
+                await conn.InsertAsync(existingCollectionsElems);
+                } else {
+                    if (selectedAward == "tree")
+                        existingCollectionsElems.Tree = currentTreeCount;
+                    else if (selectedAward == "pazzle")
+                        existingCollectionsElems.Pazzle = currentPazzleCount;
+                    else if (selectedAward == "shirt")
+                        existingCollectionsElems.Shirt = currentShirtCount;
+                    else if (selectedAward == "leave")
+                        existingCollectionsElems.Leaf = currentLeafCount;
+                    await conn.UpdateAsync(existingCollectionsElems);
+                }
+
+            }
         }
     }
 }
+
+
+
