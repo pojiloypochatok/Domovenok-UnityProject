@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using SQLite;
+using System.Threading.Tasks;
 
 public class energyGenerate : MonoBehaviour
 {
@@ -13,39 +15,78 @@ public class energyGenerate : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI energyCounter;
 
-    void Start()
+    async void Start()
     {
-        string[] parts = energyCounter.text.Split('/');
-        int currentEnergyCounter = int.Parse(parts[0]);
+        SQLiteConnection db = DatabaseManager.GetConnection();
+        string dbPath = db.DatabasePath;
+        var conn = new SQLiteAsyncConnection(dbPath);
 
-        currentEnergyCounter = maxEnergy;
+        var existingEnergyElems = await conn.Table<Energy>().FirstOrDefaultAsync(c => c.Id == 1);
+        
+        if (existingEnergyElems == null)
+        {
+            existingEnergyElems = new Energy
+            {
+                Id = 1,
+                Amount = maxEnergy,
+            };
+            await conn.InsertAsync(existingEnergyElems);
+        }
+
+        int currentEnergyCounter = existingEnergyElems.Amount;
+
         timeToNextEnergy = energyGenerationInterval;
-        UpdateEnergyDisplay(currentEnergyCounter);
+        await UpdateEnergyDisplay(currentEnergyCounter);
     }
 
-    void Update(){
+    async void Update(){
+        SQLiteConnection db = DatabaseManager.GetConnection();
+        string dbPath = db.DatabasePath;
+        var conn = new SQLiteAsyncConnection(dbPath);
+        
+        var existingEnergyElems = await conn.Table<Energy>().FirstOrDefaultAsync(c => c.Id == 1);
+
+        if (existingEnergyElems == null)
+        {
+            Debug.LogError("Energy record not found!");
+            return;
+        }
+
         string[] parts = energyCounter.text.Split('/');
-        int currentEnergyCounter = int.Parse(parts[0]);
+        int currentEnergyCounter = existingEnergyElems != null ? existingEnergyElems.Amount : 10;
+
+        existingEnergyElems.Amount = currentEnergyCounter;
+
         timeToNextEnergy -= Time.deltaTime;
         if (timeToNextEnergy <= 0)
         {
-            GenerateEnergy(currentEnergyCounter);
+            GenerateEnergy(existingEnergyElems);
+            await conn.UpdateAsync(existingEnergyElems);
             timeToNextEnergy = energyGenerationInterval;
         }
     }
 
-    private void GenerateEnergy(int currentEnergyCounter)
+    async private void GenerateEnergy(Energy existingEnergyElems)
     {
-        if (currentEnergyCounter < maxEnergy)
+        if (existingEnergyElems.Amount < maxEnergy)
         {
-            currentEnergyCounter++;
-            UpdateEnergyDisplay(currentEnergyCounter);
+            existingEnergyElems.Amount++;
+            await UpdateEnergyDisplay(existingEnergyElems.Amount);
         }
     }
 
-    private void UpdateEnergyDisplay(int currentEnergyCounter)
+    async private Task UpdateEnergyDisplay(int currentEnergyCounter)
     {
         energyCounter.text = currentEnergyCounter + "/" + maxEnergy;
+        
+        SQLiteConnection db = DatabaseManager.GetConnection();
+        string dbPath = db.DatabasePath;
+        var conn = new SQLiteAsyncConnection(dbPath);
+        
+        var existingEnergyElems = await conn.Table<Energy>().FirstOrDefaultAsync(c => c.Id == 1);
+        existingEnergyElems.Amount = currentEnergyCounter;
+        
+        await conn.UpdateAsync(existingEnergyElems);
     }
 }
 
